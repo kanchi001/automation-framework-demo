@@ -1,45 +1,61 @@
-import { Page, expect } from '@playwright/test';
-import { loginLocators } from './locators/loginLocators';
+import { expect, Page, TestInfo } from '@playwright/test';
 
 export class LoginPage {
-  constructor(private page: Page) {}
+  readonly page: Page;
+
+  constructor(page: Page) {
+    this.page = page;
+  }
 
   async goto() {
     await this.page.goto('https://www.saucedemo.com/');
   }
 
+  async clearFields() {
+    await this.page.fill('#user-name', '');
+    await this.page.fill('#password', '');
+  }
+
   async login(username: string, password: string) {
-    await this.page.fill(loginLocators.usernameInput, username);
-    await this.page.fill(loginLocators.passwordInput, password);
-    await this.page.click(loginLocators.loginButton);
+    await this.page.fill('#user-name', username);
+    await this.page.fill('#password', password);
+    await this.page.click('#login-button');
   }
 
-  errorVisible() {
-    const el = this.page.locator(loginLocators.errorMessage);
-    return el.count().then(c => c > 0).then(async exists => exists && await el.isVisible());
-  }
-
-  async assertLoginSuccess() {
-    await expect(this.page.locator(loginLocators.inventoryList)).toBeVisible();
+  async errorVisible() {
+    return (await this.page.locator('.error-message-container').count()) > 0 &&
+           await this.page.locator('.error-message-container').isVisible();
   }
 
   async assertLoginFailure() {
-    await expect(this.page.locator(loginLocators.errorMessage)).toBeVisible();
+    await expect(this.page.locator('.error-message-container')).toBeVisible();
+  }
+
+  async assertLoginSuccess() {
+    await expect(this.page.locator('.inventory_list')).toBeVisible();
   }
 
   async clearErrorIfAny() {
-    // SauceDemo shows a dismiss button when error appears
-    const closeBtn = this.page.locator('[data-test="error-button"]');
-    if (await closeBtn.count() > 0) await closeBtn.click();
+    const errorBtn = this.page.locator('[data-test="error-button"]');
+    if (await errorBtn.isVisible()) {
+      await errorBtn.click();
+    }
   }
 
   async logout() {
-    await this.page.click(loginLocators.menuButton);
-    await this.page.click(loginLocators.logoutLink);
+    await this.page.click('#react-burger-menu-btn');
+    await this.page.click('#logout_sidebar_link');
   }
 
-  async clearFields() {
-    await this.page.fill(loginLocators.usernameInput, '');
-    await this.page.fill(loginLocators.passwordInput, '');
+  // 🔥 new reusable screenshot helper
+  async captureScreenshot(testInfo: TestInfo, user: string, status: 'PASSED' | 'FAILED') {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const screenshotName = `screenshots/${testInfo.title}-${user}-${timestamp}.png`;
+
+    await this.page.screenshot({ path: screenshotName, fullPage: true });
+    await testInfo.attach(`Screenshot-${user}-${status}`, {
+      path: screenshotName,
+      contentType: 'image/png',
+    });
   }
 }
