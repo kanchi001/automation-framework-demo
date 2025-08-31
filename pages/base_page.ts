@@ -26,4 +26,12 @@ export class BasePage {
       contentType: 'image/png',
     });
   }
+
+  // 📌 Attach log to HTML report
+  async htmlLog(testInfo: TestInfo, user: string, status: 'failed to login at' | 'successfully logged in at') {
+     await testInfo.attach(`Login-Failure-${user}`, {
+        body: `User: ${user} ${status} ${new Date().toISOString()}`,
+        contentType: 'text/plain',
+      });
+  }
 }
