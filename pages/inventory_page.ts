@@ -18,4 +18,11 @@ export class InventoryPage extends BasePage {
   async openCart() {
     await this.cartButton.click();
   }
+   async addToCart(itemName: string) {
+    // Locate the parent inventory item by product name
+    const item = this.page.locator('.inventory_item', { hasText: itemName });
+
+    // Click the "Add to cart" button inside that item
+    await item.locator('button:has-text("Add to cart")').click();
+  } 
 }
