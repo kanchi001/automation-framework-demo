@@ -8,13 +8,15 @@ export class CartPage {
   }
 
   async goToCart() {
-    await this.page.goto('https://www.saucedemo.com/cart.html');
+    await this.page.goto('https://www.saucedemo.com/cart.html ');
   }
 
-  async verifyCartItem(itemName: string) {
-    await this.goToCart();
-    const cartItem = this.page.locator('.inventory_item_name', { hasText: itemName });
-    await expect(cartItem).toBeVisible();
-  }
+  async verifyCartItemWithPrice(itemName: string, expectedPrice: string) {
+  await this.goToCart();
+  const cartItem = this.page.locator('.cart_item', { hasText: itemName });
+  await expect(cartItem.locator('.inventory_item_name')).toHaveText(itemName);
+  await expect(cartItem.locator('.inventory_item_price')).toHaveText(expectedPrice);
+}
+
   
 }

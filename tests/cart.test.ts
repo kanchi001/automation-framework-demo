@@ -1,12 +1,13 @@
 // cart.test.ts
 import test from '../fixtures/baseTest';
-import { LoginPage } from '../pages/login_page';
+import { expect } from '@playwright/test';
 
 test('Add to cart flow', async ({ page, loginPage, inventoryPage, cartPage }) => {
-    const login = new LoginPage(page);
 
-  await login.gotoLogin();
+  await loginPage.gotoLogin();
   await loginPage.login('standard_user', 'secret_sauce');
   await inventoryPage.addToCart('Sauce Labs Backpack');
-  await cartPage.verifyCartItem('Sauce Labs Backpack');
+  await cartPage.verifyCartItemWithPrice('Sauce Labs Backpack', '$29.99');
+  expect(await inventoryPage.getCartCount()).toBe(1);
+
 });

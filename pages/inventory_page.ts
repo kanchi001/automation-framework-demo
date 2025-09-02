@@ -25,4 +25,9 @@ export class InventoryPage extends BasePage {
     // Click the "Add to cart" button inside that item
     await item.locator('button:has-text("Add to cart")').click();
   } 
+
+  async getCartCount() {
+  const count = await this.page.locator('.shopping_cart_badge').innerText();
+  return parseInt(count);
+}
 }

@@ -1,7 +1,19 @@
 
 # Playwright
 node_modules/
-/test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/test-results/
+*.png
+
+# Node.js dependencies
+node_modules/
+
+
+# Allure results (raw data, not the history if you want to keep it)
+allure-results/
+allure-report/
+
+# System files
+.DS_Store
