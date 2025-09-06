@@ -1,5 +1,7 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { BasePage } from './base_page';
+import { allure } from 'allure-playwright'; // still imported here if used in POM
+
 
 export class LoginPage extends BasePage {
   readonly usernameField: Locator;
@@ -27,11 +29,20 @@ export class LoginPage extends BasePage {
     await this.goto('https://www.saucedemo.com/');
   }
 
+  // async login(username: string, password: string) {
+  //   await this.usernameField.fill(username);
+  //   await this.passwordField.fill(password);
+  //   await this.loginButton.click();
+  // }
+
   async login(username: string, password: string) {
+  await allure.step(`Login with username: ${username}`, async () => {
     await this.usernameField.fill(username);
     await this.passwordField.fill(password);
     await this.loginButton.click();
-  }
+  });
+}
+
 
   async clearFields() {
     await this.usernameField.fill('');
@@ -54,6 +65,7 @@ export class LoginPage extends BasePage {
 
   async assertLoginSuccess() {
     await this.waitForElement(this.inventoryList);
+    
   }
 
   async logout() {
