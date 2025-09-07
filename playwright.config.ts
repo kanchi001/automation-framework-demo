@@ -33,7 +33,9 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   // globalSetup: require.resolve('./global-setup'),
   // globalTeardown: require.resolve('./global-teardown'),
-  workers: 1,
+  workers: 4,
+  //workers: 1,
+
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://localhost:3000',
