@@ -24,7 +24,7 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npx playwright test --reporter=line,html,allure-playwright
+        run: npx playwright test -- headless --reporter=line,html,allure-playwright
 
       - name: Upload Playwright Report
         if: always()
