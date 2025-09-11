@@ -2,7 +2,11 @@
   "name": "automation-framework-demo",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:staging": "cross-env TEST_ENV=staging npx playwright test",
+    "test:dev": "cross-env TEST_ENV=dev npx playwright test",
+    "test:prod": "cross-env TEST_ENV=prod npx playwright test"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kanchi001/automation-framework-demo.git"
@@ -18,7 +22,8 @@
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/node": "^24.3.0",
-    "allure-playwright": "^3.3.3"
+    "allure-playwright": "^3.3.3",
+    "cross-env": "^10.0.0"
   },
   "dependencies": {
     "xlsx": "^0.18.5"
