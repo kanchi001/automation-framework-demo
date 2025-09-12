@@ -1,0 +1,17 @@
+[
+  {
+    "title": "foo",
+    "body": "bar",
+    "userId": 1
+  },
+  {
+    "title": "automation",
+    "body": "playwright",
+    "userId": 2
+  },
+  {
+    "title": "hello",
+    "body": "world",
+    "userId": 3
+  }
+]

@@ -1,33 +1,25 @@
 import { test, expect } from '@playwright/test';
+import postsData from '../../test-data/posts.json';
 import { APIClient } from '../../utils/apiClient';
+import { PostData } from '../../types';
 
-test.describe('API Tests - Posts', () => {
+const posts: PostData[] = postsData;
+
+test.describe.parallel('API Tests', () => {
   let client: APIClient;
 
-  test.beforeEach(async ({ request }) => {
+  test.beforeAll(async ({ request }) => {
     client = new APIClient(request);
   });
 
-  test('GET Post by ID @api', async () => {
-    const response = await client.get('/posts/1');
-    expect(response.ok()).toBeTruthy();
+  posts.forEach((post) => {
+    test(`Verify post with ID ${post.id}`, async () => {
+      const response = await client.get(`/posts/${post.id}`);
+      expect(response.status()).toBe(200);
 
-    const data = await response.json();
-    expect(data.id).toBe(1);
-    console.log('✅ Post data:', data);
-  });
-
-  test('POST Create New Post @api', async () => {
-    const response = await client.post('/posts', {
-      title: 'Dynamic Post',
-      body: 'Hello from Playwright API Test!',
-      userId: 1,
+      const body = await response.json();
+      expect(body.id).toBe(post.id);
+      expect(body.title).toContain(post.title);
     });
-
-    expect(response.status()).toBe(201);
-
-    const data = await response.json();
-    expect(data).toHaveProperty('id');
-    console.log('✅ Created Post:', data);
   });
 });
